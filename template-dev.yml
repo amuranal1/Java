@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Test Lambda
+Resources:
+  TestLambda:
+    Properties:
+      Description: Test Lambda
+      Environment:
+        Variables:
+          environment: dev
+      Events:
+        TestScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 0 ? * SUN *)
+      FunctionName: test-lambda-dev
+      CodeUri: ./target/test-1.0.0.jar
+      Handler: com.example.test.TestApplication::handleRequest
+      MemorySize: 512
+      Runtime: java8
+      Timeout: 300
+      Policies:
+        Version:  "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:*'
+            Resource: '*'
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
